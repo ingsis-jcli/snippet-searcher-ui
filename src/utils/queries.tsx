@@ -2,27 +2,28 @@ import {useMutation, UseMutationResult, useQuery} from 'react-query';
 import {CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from './snippet.ts';
 import {SnippetOperations} from "./snippetOperations.ts";
 import {PaginatedUsers} from "./users.ts";
-import {FakeSnippetOperations} from "./mock/fakeSnippetOperations.ts";
 import {TestCase} from "../types/TestCase.ts";
 import {FileType} from "../types/FileType.ts";
 import {Rule} from "../types/Rule.ts";
 import {useAuth0} from "@auth0/auth0-react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {ImplementedSnippetOperations} from "./implementedSnippetOperations.ts";
 
 
 export const useSnippetsOperations = () => {
-    const { getAccessTokenSilently } = useAuth0();
+    const {getAccessTokenSilently} = useAuth0()
+    const [token, setToken] = useState<string>("");
 
     useEffect(() => {
-        getAccessTokenSilently()
-            .then(token => {
-                console.log(token);
-            })
-            .catch(error => console.error(error));
-    }, [getAccessTokenSilently]); // Add dependency
-
-    const snippetOperations: SnippetOperations = new FakeSnippetOperations(/* getAccessTokenSilently */); // Replace with actual implementation
-    return snippetOperations; // Ensure this is returned correctly
+         getAccessTokenSilently()
+             .then(token => {
+                 console.log(token)
+                 setToken(token);
+             })
+             .catch(error => console.error(error));
+    });
+    const snippetOperations: SnippetOperations = new ImplementedSnippetOperations(token);
+    return snippetOperations
 };
 
 
