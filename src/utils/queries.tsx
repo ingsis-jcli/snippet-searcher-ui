@@ -6,25 +6,25 @@ import {FakeSnippetOperations} from "./mock/fakeSnippetOperations.ts";
 import {TestCase} from "../types/TestCase.ts";
 import {FileType} from "../types/FileType.ts";
 import {Rule} from "../types/Rule.ts";
-// import {useAuth0} from "@auth0/auth0-react";
-// import {useEffect} from "react";
+import {useAuth0} from "@auth0/auth0-react";
+import {useEffect} from "react";
 
 
 export const useSnippetsOperations = () => {
-  // const {getAccessTokenSilently} = useAuth0()
-  //
-  // useEffect(() => {
-  //     getAccessTokenSilently()
-  //         .then(token => {
-  //             console.log(token)
-  //         })
-  //         .catch(error => console.error(error));
-  // });
+    const { getAccessTokenSilently } = useAuth0();
 
-  const snippetOperations: SnippetOperations = new FakeSnippetOperations(/* getAccessTokenSilently */); // TODO: Replace with your implementation
+    useEffect(() => {
+        getAccessTokenSilently()
+            .then(token => {
+                console.log(token);
+            })
+            .catch(error => console.error(error));
+    }, [getAccessTokenSilently]); // Add dependency
 
-  return snippetOperations
-}
+    const snippetOperations: SnippetOperations = new FakeSnippetOperations(/* getAccessTokenSilently */); // Replace with actual implementation
+    return snippetOperations; // Ensure this is returned correctly
+};
+
 
 export const useGetSnippets = (page: number = 0, pageSize: number = 10, snippetName?: string) => {
   const snippetOperations = useSnippetsOperations()
