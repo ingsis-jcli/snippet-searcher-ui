@@ -1,0 +1,55 @@
+name: "Continuous Deployment - Snippet UI"
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build UI assets
+        run: npm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ingsis-jcli
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image to GitHub Packages
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: |
+           ghcr.io/ingsis-jcli/snippet-ui:latest
+          build-args: |
+            USERNAME=${{ github.actor }}
+            TOKEN=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy on VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST}}
+          username: ${{ secrets.VM_USER}}
+          key: ${{ secrets.VM_KEY }}
+          script: |
+            pwd
+            cd infra
+            echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login -u ${{ github.actor }} --password-stdin ghcr.io
+            sudo docker-compose -f docker-compose.dev.yml pull snippet-searcher-ui
+            sudo docker-compose -f docker-compose.dev.yml up -d snippet-searcher-ui
