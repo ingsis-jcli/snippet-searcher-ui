@@ -42,8 +42,6 @@ jobs:
           build-args: |
             USERNAME=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}
-            VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}
-            VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}
 
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.0.3
