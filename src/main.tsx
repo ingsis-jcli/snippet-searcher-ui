@@ -8,9 +8,6 @@ import {Auth0Provider} from "@auth0/auth0-react";
 
 createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        console.log("Auth0 Domain:", import.meta.env.VITE_AUTH0_DOMAIN);
-        console.log("Auth0 Client ID:", import.meta.env.VITE_AUTH0_CLIENT_ID);
-        console.log("Auth0 Scope:", "read:snippets write:snippets");
         <Auth0Provider
             domain={import.meta.env.VITE_AUTH0_DOMAIN ?? ""}
             clientId={import.meta.env.VITE_AUTH0_CLIENT_ID ?? ""}
