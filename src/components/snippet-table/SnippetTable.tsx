@@ -21,6 +21,7 @@ import {CreateSnippetWithLang, getFileLanguage, Snippet} from "../../utils/snipp
 import {usePaginationContext} from "../../contexts/paginationContext.tsx";
 import {useSnackbarContext} from "../../contexts/snackbarContext.tsx";
 import {useGetFileTypes} from "../../utils/queries.tsx";
+import {useAuth0} from "@auth0/auth0-react";
 
 type SnippetTableProps = {
   handleClickSnippet: (id: string) => void;
@@ -40,8 +41,32 @@ export const SnippetTable = (props: SnippetTableProps) => {
   const {page, page_size: pageSize, count, handleChangePageSize, handleGoToPage} = usePaginationContext()
   const {createSnackbar} = useSnackbarContext()
   const {data: fileTypes} = useGetFileTypes();
+  const { getAccessTokenSilently } = useAuth0();
+    const fetchHelloFromPermissions = async () => {
+        try {
+            const token = await getAccessTokenSilently();
 
-  const handleLoadSnippet = async (target: EventTarget & HTMLInputElement) => {
+            console.log("Token from permissions service:", token);
+
+            const response = await fetch("http://localhost:8080/api/permissions/hello", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.text();
+            console.log("Response from permissions service:", data);
+        } catch (error) {
+            console.error("Error fetching from permissions service:", error);
+        }
+    };
+
+    const handleLoadSnippet = async (target: EventTarget & HTMLInputElement) => {
     const files = target.files
     if (!files || !files.length) {
       createSnackbar('error',"Please select at leat one file")
@@ -87,11 +112,19 @@ export const SnippetTable = (props: SnippetTableProps) => {
               <Search/>
             </IconButton>
           </Box>
-          <Button ref={popoverRef} variant="contained" disableRipple sx={{boxShadow: 0}}
-                  onClick={() => setPopoverMenuOpened(true)}>
-            <Add/>
-            Add Snippet
-          </Button>
+            <Button
+                ref={popoverRef}
+                variant="contained"
+                disableRipple
+                sx={{ boxShadow: 0 }}
+                onClick={() => {
+                    setPopoverMenuOpened(true);
+                    fetchHelloFromPermissions(); // Llama a la función cuando se presiona el botón
+                }}
+            >
+                <Add />
+                Add Snippet
+            </Button>
         </Box>
         <Table size="medium" sx={{borderSpacing: "0 10px", borderCollapse: "separate"}}>
           <TableHead>
