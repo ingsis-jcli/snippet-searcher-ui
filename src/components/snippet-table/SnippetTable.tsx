@@ -21,7 +21,7 @@ import {CreateSnippetWithLang, getFileLanguage, Snippet} from "../../utils/snipp
 import {usePaginationContext} from "../../contexts/paginationContext.tsx";
 import {useSnackbarContext} from "../../contexts/snackbarContext.tsx";
 import {useGetFileTypes} from "../../utils/queries.tsx";
-import {useAuth0} from "@auth0/auth0-react";
+import {GetTokenSilentlyOptions, useAuth0} from "@auth0/auth0-react";
 
 type SnippetTableProps = {
   handleClickSnippet: (id: string) => void;
@@ -44,10 +44,15 @@ export const SnippetTable = (props: SnippetTableProps) => {
   const { getAccessTokenSilently } = useAuth0();
     const fetchHelloFromPermissions = async () => {
         try {
-            const token = await getAccessTokenSilently();
+            // Obtener el token especificando el audience y scope
+            const token = await getAccessTokenSilently({
+                audience: "snippet-searcher",
+                scope: "read:snippets write:snippets",
+            } as GetTokenSilentlyOptions);
 
-            console.log("Token from permissions service:", token);
+            console.log("Token from permissions servicedwvrerv:", token);
 
+            // Hacer el request a través del proxy
             const response = await fetch("http://localhost:8080/api/permissions/hello", {
                 method: "GET",
                 headers: {
