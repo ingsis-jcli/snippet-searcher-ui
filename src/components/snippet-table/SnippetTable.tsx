@@ -42,17 +42,27 @@ export const SnippetTable = (props: SnippetTableProps) => {
   const {createSnackbar} = useSnackbarContext()
   const {data: fileTypes} = useGetFileTypes();
   const { getAccessTokenSilently } = useAuth0();
+    // Función para obtener y verificar el token
     const fetchHelloFromPermissions = async () => {
         try {
-            // Obtener el token especificando el audience y scope
+            // Obtener el token con cache desactivado para asegurar una autenticación fresca
             const token = await getAccessTokenSilently({
-                audience: "snippet-searcher",
-                scope: "read:snippets write:snippets",
+                authorizationParams: {
+                    audience: "snippet-searcher",
+                    scope: "read:snippets write:snippets",
+                },
+                cacheMode: "off",
             } as GetTokenSilentlyOptions);
 
-            console.log("Token from permissions servicedwvrerv:", token);
+            // Verificar si el token está disponible
+            if (!token) {
+                console.error("Token no obtenido");
+                return;
+            }
 
-            // Hacer el request a través del proxy
+            console.log("Token obtenido:", token); // Muestra el token para confirmar
+
+            // Realizar el request usando el token obtenido
             const response = await fetch("http://localhost:8080/api/permissions/hello", {
                 method: "GET",
                 headers: {
@@ -61,13 +71,14 @@ export const SnippetTable = (props: SnippetTableProps) => {
             });
 
             if (!response.ok) {
+                // Mostrar el status y el mensaje en caso de error
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.text();
-            console.log("Response from permissions service:", data);
+            console.log("Respuesta desde permissions service:", data);
         } catch (error) {
-            console.error("Error fetching from permissions service:", error);
+            console.error("Error fetching desde permissions service:", error);
         }
     };
 
