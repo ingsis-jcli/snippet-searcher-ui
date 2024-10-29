@@ -40,8 +40,6 @@ jobs:
           tags: |
            ghcr.io/ingsis-jcli/snippet-ui:latest
           build-args: |
-            VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}
-            VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}
             USERNAME=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}
             VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}
