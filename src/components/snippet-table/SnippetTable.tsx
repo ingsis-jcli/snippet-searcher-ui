@@ -63,7 +63,7 @@ export const SnippetTable = (props: SnippetTableProps) => {
             console.log("Token obtenido:", token); // Muestra el token para confirmar
 
             // Realizar el request usando el token obtenido
-            const response = await fetch("http://localhost:8080/api/permissions/hello", {
+            const response = await fetch("http://localhost:8080/api/snippets/snippet?snippetId=9", {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
