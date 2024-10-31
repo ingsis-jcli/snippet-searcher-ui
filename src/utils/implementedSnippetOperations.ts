@@ -31,8 +31,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 page,
                 size: pageSize,
                 name: snippetName,
-                owner: true,
-                shared: true,
+                owner: false,
+                shared: false,
             }
         });
         return response.data;
