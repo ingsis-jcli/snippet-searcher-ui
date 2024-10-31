@@ -145,7 +145,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
-        //TODO sacar type o ver como manejarlo del dto
+        //TODO sacar type o ver como manejarlo del dto -> Pasarle VALID por default
         const headers = await this.getHeaders();
 
         const response = await axios.post(`${this.baseUrl}/snippets/test-case`, testCase, {
