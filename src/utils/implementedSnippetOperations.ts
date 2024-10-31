@@ -24,17 +24,15 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async listSnippetDescriptors(page: number, pageSize: number, snippetName?: string): Promise<PaginatedSnippets> {
         const headers = await this.getHeaders();
-
+        console.log("page" + page + "pageSize" + pageSize + "snippetName" + snippetName);
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/search`, {
             headers,
             params: {
-                page,
-                size: pageSize,
-                name: snippetName,
                 owner: false,
                 shared: false,
             }
         });
+        console.log(response.data);
         return response.data;
     }
 
