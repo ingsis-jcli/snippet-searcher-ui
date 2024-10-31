@@ -39,7 +39,15 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             headers,
             params,
         });
-        return response.data;
+
+        const snippets = response.data;
+
+        return {
+            page,
+            page_size: pageSize,
+            count: snippets.length,
+            snippets,
+        };
     }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
