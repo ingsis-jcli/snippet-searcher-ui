@@ -152,13 +152,10 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             output: testCase.output,
             type: "VALID",
         };
-
         const headers = await this.getHeaders();
-
         const response = await axios.post(`${this.baseUrl}/snippets/test-case`, defaultTestType, {
             headers,
         });
-
         return response.data;
     }
 
@@ -198,31 +195,27 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getFileTypes(): Promise<FileType[]> {
-        // TODO
         const response = await axios.get(`${this.baseUrl}/file-types`, {
             headers: this.getHeaders(),
         });
-        return response.data;
+        const fileTypes: FileType[] = Object.values(response.data);
+        return fileTypes;
     }
 
     async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
         const headers = await this.getHeaders();
-
         const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, newRules, {
             headers,
         });
-
         return response.data;
     }
 
 
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
         const headers = await this.getHeaders();
-
         const response = await axios.put(`${this.baseUrl}/snippets/rules/linting`, newRules, {
             headers,
         });
-
         return response.data;
     }
 }
