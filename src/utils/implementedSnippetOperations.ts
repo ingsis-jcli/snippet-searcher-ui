@@ -8,7 +8,7 @@ import { Rule } from "../types/Rule.ts";
 import { SnippetOperations } from "./snippetOperations.ts";
 
 export class ImplementedSnippetOperations implements SnippetOperations {
-    private baseUrl = "http://localhost:8080/api";
+    private baseUrl = "http://localhost:80/api";
     private token: string;
 
     constructor(token: string) {
