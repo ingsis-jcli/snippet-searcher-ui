@@ -195,7 +195,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getFileTypes(): Promise<FileType[]> {
-        const response = await axios.get(`${this.baseUrl}/file-types`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/file-types`, {
             headers: this.getHeaders(),
         });
         const fileTypes: FileType[] = Object.values(response.data);
