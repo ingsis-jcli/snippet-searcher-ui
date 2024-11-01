@@ -105,25 +105,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getFormatRules(): Promise<Rule[]> {
-        const version = "1.1";
         const headers = await this.getHeaders();
-        const response = await axios.get(`${this.baseUrl}/printscript/formatting_rules`, {
-            headers,
-            params: {
-                version,
-            },
+        const response = await axios.get(`${this.baseUrl}/printscript/formatting`, {
+            headers
         });
         return response.data;
     }
 
     async getLintingRules(): Promise<Rule[]> {
-        const version = "1.1";
         const headers = await this.getHeaders();
-        const response = await axios.get(`${this.baseUrl}/printscript/linting_rules`, {
-            headers,
-            params: {
-                version,
-            },
+        const response = await axios.get(`${this.baseUrl}/printscript/linting`, {
+            headers
         });
         return response.data;
     }
