@@ -187,7 +187,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getFileTypes(): Promise<FileType[]> {
-        const response = await axios.get(`${this.baseUrl}/snippets/file-types`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/snippet/file-types`, {
             headers: this.getHeaders(),
         });
         const fileTypes: FileType[] = Object.values(response.data);
@@ -196,7 +196,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
         const headers = await this.getHeaders();
-        const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, newRules, {
+        const response = await axios.put(`${this.baseUrl}/snippets/rule/formatting`, newRules, {
             headers,
         });
         return response.data;
