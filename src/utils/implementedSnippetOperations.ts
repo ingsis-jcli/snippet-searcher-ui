@@ -8,7 +8,7 @@ import { Rule } from "../types/Rule.ts";
 import { SnippetOperations } from "./snippetOperations.ts";
 
 export class ImplementedSnippetOperations implements SnippetOperations {
-    private baseUrl = "https://snippetsearcherjcli.duckdns.org/api";
+    private baseUrl = "http://reverse-proxy/api";
     private token: string;
 
     constructor(token: string) {
