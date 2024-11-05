@@ -6,10 +6,9 @@ import { TestCaseResult } from "./queries.tsx";
 import { FileType } from "../types/FileType.ts";
 import { Rule } from "../types/Rule.ts";
 import { SnippetOperations } from "./snippetOperations.ts";
-import {BACKEND_URL} from "./constants.ts";
 
 export class ImplementedSnippetOperations implements SnippetOperations {
-    private baseUrl = BACKEND_URL;
+    private baseUrl = "https://snippetsearcherjcli.duckdns.org/api";
     private token: string;
 
     constructor(token: string) {
