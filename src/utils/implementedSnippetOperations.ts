@@ -51,9 +51,30 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
+        const versions: Map<string, string> = new Map([
+            ["printscript1", "1.0"],
+            ["printscript2", "1.1"]
+        ]);
+        const languages: Map<string, string> = new Map([
+            ["printscript1", "printscript"],
+            ["printscript2", "printscript"]
+        ]);
+
+        const languageKey = createSnippet.language;
+        const version = versions.get(languageKey) || "1.0";
+        const language = languages.get(languageKey) || "printscript";
+
+        const { language: _, ...payloadWithoutLanguage } = createSnippet;
+
+        const payload = {
+            ...payloadWithoutLanguage,
+            language,
+            version
+        };
+
         const headers = await this.getHeaders();
 
-        const response = await axios.post(`${this.baseUrl}/snippets/snippet`, createSnippet, {
+        const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
             headers,
         });
         return response.data;
@@ -187,7 +208,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getFileTypes(): Promise<FileType[]> {
-        const response = await axios.get(`${this.baseUrl}/snippets/snippet/file-types`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/snippet/filetypes`, {
             headers: this.getHeaders(),
         });
         const fileTypes: FileType[] = Object.values(response.data);
