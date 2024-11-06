@@ -46,6 +46,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
         const snippets = response.data;
 
+        console.log("Snippets:", JSON.stringify(snippets, null, 2));
+
         return {
             page,
             page_size: pageSize,
