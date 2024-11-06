@@ -17,7 +17,6 @@ export const useSnippetsOperations = () => {
     useEffect(() => {
          getAccessTokenSilently()
              .then(token => {
-                 console.log(token)
                  setToken(token);
              })
              .catch(error => console.error(error));
@@ -156,16 +155,15 @@ export const useFormatSnippet = () => {
 }
 
 export const useDeleteSnippet = ({onSuccess}: {onSuccess: () => void}) => {
-  const snippetOperations = useSnippetsOperations()
+    const snippetOperations = useSnippetsOperations()
 
-  return useMutation<string, Error, string>(
-      id => snippetOperations.deleteSnippet(id),
-      {
-        onSuccess,
-      }
-  );
+    return useMutation<string, Error, string>(
+        id => snippetOperations.deleteSnippet(id),
+        {
+            onSuccess,
+        }
+    );
 }
-
 
 export const useGetFileTypes = () => {
   const snippetOperations = useSnippetsOperations()
