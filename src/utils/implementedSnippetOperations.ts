@@ -8,11 +8,12 @@ import { Rule } from "../types/Rule.ts";
 import { SnippetOperations } from "./snippetOperations.ts";
 
 export class ImplementedSnippetOperations implements SnippetOperations {
-    private baseUrl = "http://reverse-proxy/api";
+    private baseUrl: string;
     private token: string;
 
     constructor(token: string) {
         this.token = token;
+        this.baseUrl = `${window.location.origin}/api`;
     }
 
     private getHeaders() {
