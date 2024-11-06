@@ -72,12 +72,11 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const version = versions.get(languageKey) || "1.0";
         const language = languages.get(languageKey) || "printscript";
 
-        const { language: _, ...payloadWithoutLanguage } = createSnippet;
-
-        const payload = {
-            ...payloadWithoutLanguage,
-            language,
-            version
+        const payload: {name: string; content: string; language: string; version: string; } = {
+            name: createSnippet.name,
+            content: createSnippet.content,
+            language: language,
+            version: version,
         };
 
         const headers = await this.getHeaders();
@@ -87,6 +86,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         });
         return response.data;
     }
+
 
     async getSnippetById(id: string): Promise<Snippet | undefined> {
         const headers = await this.getHeaders();
@@ -222,7 +222,12 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             headers: this.getHeaders(),
         });
         console.log(response.data);
-        const fileTypes: FileType[] = Object.values(response.data);
+
+        const fileTypes: FileType[] = Object.entries(response.data).map(([language, extension]) => ({
+            language,
+            extension: extension as string,
+        }));
+
         console.log("FileTypes:", JSON.stringify(fileTypes, null, 2));
         return fileTypes;
     }
