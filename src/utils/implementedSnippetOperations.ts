@@ -41,8 +41,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             params,
         });
 
-        console.log("headers: " + headers);
-        console.log("params: " + params);
+        console.log("Headers:", JSON.stringify(headers, null, 2));
+        console.log("Params:", JSON.stringify(params, null, 2));
 
         const snippets = response.data;
 
