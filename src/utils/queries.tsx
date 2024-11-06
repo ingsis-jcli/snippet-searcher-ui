@@ -39,6 +39,8 @@ export const useSnippetsOperations = () => {
 export const useGetSnippets = (page: number = 0, pageSize: number = 10, snippetName?: string) => {
     const { snippetOperations, loading } = useSnippetsOperations();
 
+    console.log("Changed version of the token management.")
+
     return useQuery<PaginatedSnippets, Error>(
         ['listSnippets', page, pageSize, snippetName],
         () => snippetOperations!.listSnippetDescriptors(page, pageSize, snippetName),
