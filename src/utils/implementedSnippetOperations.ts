@@ -36,6 +36,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             params.name = snippetName;
         }
 
+        console.log("Performing request on: ")
+
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/search`, {
             headers,
             params,
