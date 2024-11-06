@@ -18,6 +18,7 @@ const useToken = () => {
             try {
                 const fetchedToken = await getAccessTokenSilently();
                 setToken(fetchedToken);
+                console.log("Fetched token:", fetchedToken);
             } catch (error) {
                 console.error("Error fetching token:", error);
             } finally {
