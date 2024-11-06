@@ -81,6 +81,9 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
         const headers = await this.getHeaders();
 
+        console.log("Creating snippet with payload:", JSON.stringify(payload, null, 2));
+        console.log("Headers:", JSON.stringify(headers, null, 2));
+        console.log("URL:", `${this.baseUrl}/snippets/snippet`);
         const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
             headers,
         });
@@ -216,19 +219,15 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getFileTypes(): Promise<FileType[]> {
-        console.log("Performing request on: " + this.baseUrl + "/snippets/snippet/filetypes");
-        console.log("Headers:", JSON.stringify(this.getHeaders(), null, 2));
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/filetypes`, {
             headers: this.getHeaders(),
         });
-        console.log(response.data);
 
         const fileTypes: FileType[] = Object.entries(response.data).map(([language, extension]) => ({
             language,
             extension: extension as string,
         }));
 
-        console.log("FileTypes:", JSON.stringify(fileTypes, null, 2));
         return fileTypes;
     }
 
