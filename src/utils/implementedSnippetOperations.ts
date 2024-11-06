@@ -107,7 +107,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getUserFriends(name?: string, page?: number, pageSize?: number): Promise<PaginatedUsers> {
         //TODO (ver tema paginado)
-        const response = await axios.get(`${this.baseUrl}/permissions/friends`, {
+        const response = await axios.get(`${this.baseUrl}/permissions/users`, {
             headers: this.getHeaders(),
             params: {
                 page,
@@ -128,7 +128,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getFormatRules(): Promise<Rule[]> {
         const headers = await this.getHeaders();
-        const response = await axios.get(`${this.baseUrl}/printscript/formatting`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/rules/formatting`, {
             headers
         });
         return response.data;
@@ -136,7 +136,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getLintingRules(): Promise<Rule[]> {
         const headers = await this.getHeaders();
-        const response = await axios.get(`${this.baseUrl}/printscript/linting`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/rules/linting`, {
             headers
         });
         return response.data;
@@ -144,7 +144,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getTestCases(): Promise<TestCase[]> {
         // TODO (no se cual es)
-        const response = await axios.get(`${this.baseUrl}/test-cases`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/testcase`, {
             headers: this.getHeaders(),
         });
         return response.data;
@@ -167,7 +167,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             type: "VALID",
         };
         const headers = await this.getHeaders();
-        const response = await axios.post(`${this.baseUrl}/snippets/test-case`, defaultTestType, {
+        const response = await axios.post(`${this.baseUrl}/snippets/testcase`, defaultTestType, {
             headers,
         });
         return response.data;
@@ -176,7 +176,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async removeTestCase(id: string): Promise<string> {
         // TODO no implementado
-        const response = await axios.delete(`${this.baseUrl}/test-cases/${id}`, {
+        const response = await axios.delete(`${this.baseUrl}/snippets/testcase/${id}`, {
             headers: this.getHeaders(),
         });
         return response.data;
@@ -184,7 +184,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async deleteSnippet(id: string): Promise<string> {
         // TODO falta el delete en snippet controller
-        const response = await axios.delete(`${this.baseUrl}/snippets/${id}`, {
+        const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
             headers: this.getHeaders(),
         });
         return response.data;
@@ -218,7 +218,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
         const headers = await this.getHeaders();
-        const response = await axios.put(`${this.baseUrl}/snippets/rule/formatting`, newRules, {
+        const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, newRules, {
             headers,
         });
         return response.data;
