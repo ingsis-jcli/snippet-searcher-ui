@@ -183,7 +183,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async deleteSnippet(id: string): Promise<string> {
-        // TODO falta el delete en snippet controller
+        console.log("Deleting snippet with id:", id);
         const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
             headers: this.getHeaders(),
         });
