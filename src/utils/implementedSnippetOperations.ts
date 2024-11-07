@@ -36,11 +36,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             params.name = snippetName;
         }
 
-        console.log("Performing request on: " + this.baseUrl + "/snippets/snippet/search");
-
-        console.log("Headers:", JSON.stringify(headers, null, 2));
-        console.log("Params:", JSON.stringify(params, null, 2));
-
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/search`, {
             headers,
             params,
@@ -48,8 +43,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
 
         const snippets = response.data;
-
-        console.log("Snippets:", JSON.stringify(snippets, null, 2));
 
         return {
             page,
@@ -61,7 +54,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
         const [language, version] = createSnippet.language.split(":");
-
         const payload: {name: string; content: string; language: string; version: string; } = {
             name: createSnippet.name,
             content: createSnippet.content,
@@ -70,10 +62,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         };
 
         const headers = await this.getHeaders();
-
-        console.log("Creating snippet with payload:", JSON.stringify(payload, null, 2));
-        console.log("Headers:", JSON.stringify(headers, null, 2));
-        console.log("URL:", `${this.baseUrl}/snippets/snippet`);
         const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
             headers,
         });
@@ -96,12 +84,15 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
         const headers = await this.getHeaders();
 
+        console.log("Performing update at: " + `${this.baseUrl}/snippets/snippet?snippetId=${id}`);
         const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet, {
             headers,
             params: {
                 snippetId: id,
             },
         });
+
+        console.log("Response:", JSON.stringify(response.data, null, 2));
         return response.data;
     }
 
@@ -183,7 +174,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async deleteSnippet(id: string): Promise<string> {
-        console.log("Deleting snippet with id:", id);
         const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
             headers: this.getHeaders(),
         });
