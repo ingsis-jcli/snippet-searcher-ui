@@ -38,13 +38,14 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
         console.log("Performing request on: " + this.baseUrl + "/snippets/snippet/search");
 
+        console.log("Headers:", JSON.stringify(headers, null, 2));
+        console.log("Params:", JSON.stringify(params, null, 2));
+
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/search`, {
             headers,
             params,
         });
 
-        console.log("Headers:", JSON.stringify(headers, null, 2));
-        console.log("Params:", JSON.stringify(params, null, 2));
 
         const snippets = response.data;
 
@@ -59,18 +60,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
-        const versions: Map<string, string> = new Map([
-            ["printscript1", "1.0"],
-            ["printscript2", "1.1"]
-        ]);
-        const languages: Map<string, string> = new Map([
-            ["printscript1", "printscript"],
-            ["printscript2", "printscript"]
-        ]);
-
-        const languageKey = createSnippet.language;
-        const version = versions.get(languageKey) || "1.0";
-        const language = languages.get(languageKey) || "printscript";
+        const [language, version] = createSnippet.language.split(":");
 
         const payload: {name: string; content: string; language: string; version: string; } = {
             name: createSnippet.name,
@@ -223,10 +213,16 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             headers: this.getHeaders(),
         });
 
-        const fileTypes: FileType[] = Object.entries(response.data).map(([language, extension]) => ({
-            language,
-            extension: extension as string,
-        }));
+        console.log("Response:", JSON.stringify(response.data, null, 2));
+
+        const fileTypes: FileType[] = Object.entries(response.data).map(([key, extension]) => {
+            return {
+                language: key as string,
+                extension: extension as string,
+            };
+        });
+
+        console.log("File types:", JSON.stringify(response.data, null, 2));
 
         return fileTypes;
     }
