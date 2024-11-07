@@ -85,7 +85,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const headers = await this.getHeaders();
 
         console.log("Performing update at: " + `${this.baseUrl}/snippets/snippet?snippetId=${id}`);
-        const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet, {
+        console.log("Content: " + updateSnippet.content);
+        const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet.content, {
             headers,
             params: {
                 snippetId: id,
