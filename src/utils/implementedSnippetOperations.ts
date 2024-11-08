@@ -158,8 +158,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
-        // TODO (ver tema email)
-        console.log("Sharing snippet with id", snippetId, "with user id", userId);
         const  response = await axios.post(`${this.baseUrl}/permissions/permissions/share`, null, {
             headers: this.getHeaders(),
             params: {
@@ -167,7 +165,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 friendId: userId,
             },
         });
-        console.log("Response", response);
         return response.data;
     }
 
@@ -204,20 +201,25 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
-        // TODO
         const defaultTestType = {
-            snippetId: testCase.id,
             name: testCase.name,
+            snippetId: testCase.id,
             input: testCase.input,
             output: testCase.output,
             type: "VALID",
         };
+
         const headers = await this.getHeaders();
+        console.log("Posting test case with: ", defaultTestType);
+
         const response = await axios.post(`${this.baseUrl}/snippets/testcase`, defaultTestType, {
             headers,
         });
+
+        console.log("Response: ", response);
         return response.data;
     }
+
 
 
     async removeTestCase(id: string): Promise<string> {
