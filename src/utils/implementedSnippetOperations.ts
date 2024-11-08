@@ -240,21 +240,16 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
         // TODO
+        console.log("Testing snippet with: ", testCase);
         const headers = await this.getHeaders();
 
-        const testCaseRequest = {
-            snippetName: testCase.name,
-            url: "",
-            input: testCase.input ?? [],
-            output: testCase.output ?? [],
-            version: "1.1"
-        };
-
-        const response = await axios.post(`${this.baseUrl}/printscript/test`, testCaseRequest, {
+        const response = await axios.post(`${this.baseUrl}/snippets/testcase/${testCase.id}`, {
             headers,
         });
 
-        return response.data as TestCaseResult;
+        console.log("Response: ", response);
+
+        return this.mapTestResultToCorresponding(response.data);
     }
 
     async getFileTypes(): Promise<FileType[]> {
@@ -301,6 +296,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 return 'compliant';
             default:
                 return 'pending';
+        }
+    }
+
+    mapTestResultToCorresponding(status: string): TestCaseResult {
+        switch (status) {
+            case 'SUCCESS':
+                return 'success';
+            case 'FAILURE':
+                return 'fail';
+            default:
+                return 'fail';
         }
     }
 }
