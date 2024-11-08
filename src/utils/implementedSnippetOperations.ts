@@ -1,11 +1,22 @@
 import axios from 'axios';
 import {ComplianceEnum, CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from './snippet';
-import { PaginatedUsers } from "./users.ts";
+import {PaginatedUsers, User} from "./users.ts";
 import { TestCase } from "../types/TestCase.ts";
 import { TestCaseResult } from "./queries.tsx";
 import { FileType } from "../types/FileType.ts";
 import { Rule } from "../types/Rule.ts";
 import { SnippetOperations } from "./snippetOperations.ts";
+
+interface SnippetResponse {
+    id: string;
+    name: string;
+    content: string;
+    language: string;
+    version: string;
+    extension: string;
+    compliance: string;
+    author: string;
+}
 
 export class ImplementedSnippetOperations implements SnippetOperations {
     private baseUrl: string;
@@ -38,7 +49,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             headers,
             params,
         });
-        const snippets = response.data.map((snippet: any) => ({
+        const snippets = response.data.map((snippet: SnippetResponse) => ({
             id: snippet.id,
             name: snippet.name,
             content: snippet.content,
@@ -133,7 +144,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getUserFriends(name?: string, page?: number, pageSize?: number): Promise<PaginatedUsers> {
-        //TODO (ver tema paginado)
         console.log("Fetching users...");
         const response = await axios.get(`${this.baseUrl}/permissions/users`, {
             headers: this.getHeaders(),
@@ -143,9 +153,24 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 name
             }
         });
+
         console.log("Users:", JSON.stringify(response.data, null, 2));
-        return response.data;
+        const users: User[] = response.data.users.map((user: { email: string; id: string }) => ({
+            name: user.email,
+            id: user.id,
+        }));
+
+        const paginatedUsers: PaginatedUsers = {
+            page: response.data.page,
+            page_size: response.data.pageSize,
+            count: response.data.count,
+            users,
+        };
+
+        console.log("Mapped Users:", JSON.stringify(paginatedUsers, null, 2));
+        return paginatedUsers;
     }
+
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
         // TODO (ver tema email)
