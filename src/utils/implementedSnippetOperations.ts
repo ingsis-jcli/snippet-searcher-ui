@@ -193,7 +193,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async formatSnippet(snippetId: string): Promise<string> {
         // TODO (te paso el codigo y el token)
-        const response = await axios.post(`${this.baseUrl}/snippets/format/${snippetId}`, {
+        const response = await axios.post(`${this.baseUrl}/snippets/snippet/format/${snippetId}`, {
             headers: this.getHeaders(),
         });
         return response.data;
