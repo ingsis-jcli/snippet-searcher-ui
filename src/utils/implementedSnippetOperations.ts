@@ -163,8 +163,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const  response = await axios.post(`${this.baseUrl}/permissions/permissions/share`, null, {
             headers: this.getHeaders(),
             params: {
-                snippetId,
-                userId,
+                snippetId: snippetId,
+                friendId: userId,
             },
         });
         console.log("Response", response);
