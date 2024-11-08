@@ -41,8 +41,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             params,
         });
 
+        const snippets = response.data.map((snippet: any) => ({
+            id: snippet.id,
+            name: snippet.name,
+            content: snippet.content,
+            language: snippet.language,
+            extension: snippet.extension,
+            compliance: this.mapProcessStatusToComplianceEnum(snippet.compliance),
+            author: snippet.author,
+        }));
 
-        const snippets = response.data;
+        console.log("Snippets:", JSON.stringify(snippets, null, 2));
 
         return {
             page,
@@ -60,6 +69,9 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             language: language,
             version: version,
         };
+
+        console.log("Payload:", JSON.stringify(payload, null, 2));
+        console.log("Creating snippet at: " + `${this.baseUrl}/snippets/snippet`);
 
         const headers = await this.getHeaders();
         const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
