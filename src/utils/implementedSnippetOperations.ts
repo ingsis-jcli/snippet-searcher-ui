@@ -135,18 +135,11 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getUserFriends(name?: string, page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
-        console.log("Fetching users...");
-
         const params : {page: number, pageSize: number, name?: string } = { page, pageSize, name };
-
-        console.log("Fetching users with params:", JSON.stringify(params, null, 2));
         const response = await axios.get(`${this.baseUrl}/permissions/users`, {
             headers: this.getHeaders(),
             params,
         });
-
-        console.log("Raw Response:", JSON.stringify(response.data, null, 2));
-
         const users: User[] = Array.isArray(response.data.users)
             ? response.data.users.map((user: { id: string; email: string }) => ({
                 name: user.email,
@@ -160,21 +153,21 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             count: response.data.count,
             users,
         };
-
-        console.log("Mapped Users:", JSON.stringify(paginatedUsers, null, 2));
         return paginatedUsers;
     }
 
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
         // TODO (ver tema email)
-        const  response = await axios.post(`${this.baseUrl}/snippets/share`, null, {
+        console.log("Sharing snippet with id", snippetId, "with user id", userId);
+        const  response = await axios.post(`${this.baseUrl}/permissions/permissions/share`, null, {
             headers: this.getHeaders(),
             params: {
                 snippetId,
                 userId,
             },
         });
+        console.log("Response", response);
         return response.data;
     }
 
