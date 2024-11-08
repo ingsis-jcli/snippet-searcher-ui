@@ -203,7 +203,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
         const defaultTestType = {
             name: testCase.name,
-            snippetId: testCase.id,
+            snippetId: testCase.snippetId,
             input: testCase.input,
             output: testCase.output,
             type: "VALID",
@@ -243,7 +243,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         console.log("Testing snippet with: ", testCase);
         const headers = await this.getHeaders();
 
-        const response = await axios.get(`${this.baseUrl}/snippets/testcase/${testCase.id}`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/testcase/${testCase.snippetId}`, {
             headers,
         });
 
