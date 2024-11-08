@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet } from './snippet';
+import {ComplianceEnum, CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from './snippet';
 import { PaginatedUsers } from "./users.ts";
 import { TestCase } from "../types/TestCase.ts";
 import { TestCaseResult } from "./queries.tsx";
@@ -65,7 +65,18 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
             headers,
         });
-        return response.data;
+
+        const snippet: Snippet = {
+            id: response.data.id,
+            name: response.data.name,
+            content: response.data.content,
+            language: response.data.language,
+            extension: response.data.extension,
+            compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
+            author: response.data.author,
+        }
+        console.log("Snippet created:", JSON.stringify(snippet, null, 2));
+        return snippet;
     }
 
 
@@ -78,7 +89,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 snippetId: id,
             },
         });
-        return response.data;
+        const snippet: Snippet = {
+            id: response.data.id,
+            name: response.data.name,
+            content: response.data.content,
+            language: response.data.language,
+            extension: response.data.extension,
+            compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
+            author: response.data.author,
+        }
+        console.log("Snippet get:", JSON.stringify(snippet, null, 2));
+        return snippet;
     }
 
     async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
@@ -93,8 +114,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             },
         });
 
-        console.log("Response:", JSON.stringify(response.data, null, 2));
-        return response.data;
+        const snippet: Snippet = {
+            id: response.data.id,
+            name: response.data.name,
+            content: response.data.content,
+            language: response.data.language,
+            extension: response.data.extension,
+            compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
+            author: response.data.author,
+        }
+        console.log("Snippet edit:", JSON.stringify(snippet, null, 2));
+        return snippet;
     }
 
     async getUserFriends(name?: string, page?: number, pageSize?: number): Promise<PaginatedUsers> {
@@ -151,6 +181,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
+        // TODO
         const defaultTestType = {
             snippetId: testCase.id,
             name: testCase.name,
@@ -175,6 +206,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async deleteSnippet(id: string): Promise<string> {
+        // TODO
         const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
             headers: this.getHeaders(),
         });
@@ -182,6 +214,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
+        // TODO
         const headers = await this.getHeaders();
 
         const testCaseRequest = {
@@ -203,22 +236,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/filetypes`, {
             headers: this.getHeaders(),
         });
-
-        console.log("Response:", JSON.stringify(response.data, null, 2));
-
         const fileTypes: FileType[] = Object.entries(response.data).map(([key, extension]) => {
             return {
                 language: key as string,
                 extension: extension as string,
             };
         });
-
-        console.log("File types:", JSON.stringify(response.data, null, 2));
-
         return fileTypes;
     }
 
     async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
+        // TODO
         const headers = await this.getHeaders();
         const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, newRules, {
             headers,
@@ -228,10 +256,26 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
 
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
+        // TODO
         const headers = await this.getHeaders();
         const response = await axios.put(`${this.baseUrl}/snippets/rules/linting`, newRules, {
             headers,
         });
         return response.data;
+    }
+
+    mapProcessStatusToComplianceEnum(status: string): ComplianceEnum {
+        switch (status) {
+            case 'PENDING':
+                return 'pending';
+            case 'ERROR':
+                return 'failed';
+            case 'NON_COMPLIANT':
+                return 'not-compliant';
+            case 'COMPLIANT':
+                return 'compliant';
+            default:
+                return 'pending';
+        }
     }
 }
