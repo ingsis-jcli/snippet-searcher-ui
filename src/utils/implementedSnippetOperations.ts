@@ -58,6 +58,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             compliance: this.mapProcessStatusToComplianceEnum(snippet.compliance),
             author: snippet.author,
         }));
+        console.log("Snippets with pagination " , snippets)
         return {
             page,
             page_size: pageSize,
@@ -192,7 +193,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async formatSnippet(snippetId: string): Promise<string> {
-        // TODO (te paso el codigo y el token)
         const response = await axios.post(`${this.baseUrl}/snippets/snippet/format/${snippetId}`, {
             headers: this.getHeaders(),
         });
