@@ -136,33 +136,68 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getUserFriends(name?: string, page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
         console.log("Fetching users...");
-        const response = await axios.get(`${this.baseUrl}/permissions/users`, {
-            headers: this.getHeaders(),
-            params: {
-                page,
-                pageSize,
-                name
-            }
-        });
 
-        console.log("Raw Response:", JSON.stringify(response.data, null, 2));
+        if (!name) {
+            const response = await axios.get(`${this.baseUrl}/permissions/users`, {
+                headers: this.getHeaders(),
+                params: {
+                    page,
+                    pageSize,
+                }
+            });
 
-        const users : User[] = Array.isArray(response.data.users)
-            ? response.data.users.map((user: { id: string; email: string }) => ({
-                name: user.email,
-                id: user.id,
-            }))
-            : [];
+            console.log("Raw Response:", JSON.stringify(response.data, null, 2));
 
-        const paginatedUsers: PaginatedUsers = {
-            page: response.data.page,
-            page_size: response.data.pageSize,
-            count: response.data.count,
-            users,
-        };
+            const users : User[] = Array.isArray(response.data.users)
+                ? response.data.users.map((user: { id: string; email: string }) => ({
+                    name: user.email,
+                    id: user.id,
+                }))
+                : [];
 
-        console.log("Mapped Users:", JSON.stringify(paginatedUsers, null, 2));
-        return paginatedUsers;
+            const paginatedUsers: PaginatedUsers = {
+                page: response.data.page,
+                page_size: response.data.pageSize,
+                count: response.data.count,
+                users,
+            };
+
+            console.log("Mapped Users:", JSON.stringify(paginatedUsers, null, 2));
+            return paginatedUsers;
+        }
+
+        else {
+            const response = await axios.get(`${this.baseUrl}/permissions/users`, {
+                headers: this.getHeaders(),
+                params: {
+                    page,
+                    pageSize,
+                    name
+                }
+            });
+
+            console.log("Raw Response:", JSON.stringify(response.data, null, 2));
+
+            const users : User[] = Array.isArray(response.data.users)
+                ? response.data.users.map((user: { id: string; email: string }) => ({
+                    name: user.email,
+                    id: user.id,
+                }))
+                : [];
+
+            const paginatedUsers: PaginatedUsers = {
+                page: response.data.page,
+                page_size: response.data.pageSize,
+                count: response.data.count,
+                users,
+            };
+
+            console.log("Mapped Users:", JSON.stringify(paginatedUsers, null, 2));
+            return paginatedUsers;
+        }
+
+
+
     }
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
