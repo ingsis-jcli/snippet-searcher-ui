@@ -242,7 +242,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         console.log("Testing snippet with: ", testCase);
         const headers = await this.getHeaders();
 
-        const response = await axios.get(`${this.baseUrl}/snippets/testcase/${testCase.snippetId}`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/testcase/run/${testCase.snippetId}`, {
             headers,
         });
 
