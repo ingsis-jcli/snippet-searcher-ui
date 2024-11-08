@@ -31,16 +31,13 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             owner: false,
             shared: false,
         };
-
         if (snippetName) {
             params.name = snippetName;
         }
-
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/search`, {
             headers,
             params,
         });
-
         const snippets = response.data.map((snippet: any) => ({
             id: snippet.id,
             name: snippet.name,
@@ -50,9 +47,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             compliance: this.mapProcessStatusToComplianceEnum(snippet.compliance),
             author: snippet.author,
         }));
-
         console.log("Snippets:", JSON.stringify(snippets, null, 2));
-
         return {
             page,
             page_size: pageSize,
@@ -69,15 +64,12 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             language: language,
             version: version,
         };
-
         console.log("Payload:", JSON.stringify(payload, null, 2));
         console.log("Creating snippet at: " + `${this.baseUrl}/snippets/snippet`);
-
         const headers = await this.getHeaders();
         const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
             headers,
         });
-
         const snippet: Snippet = {
             id: response.data.id,
             name: response.data.name,
@@ -94,7 +86,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getSnippetById(id: string): Promise<Snippet | undefined> {
         const headers = await this.getHeaders();
-
         const response = await axios.get(`${this.baseUrl}/snippets/snippet`, {
             headers,
             params: {
@@ -116,16 +107,18 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
         const headers = await this.getHeaders();
-
         console.log("Performing update at: " + `${this.baseUrl}/snippets/snippet?snippetId=${id}`);
         console.log("Content: " + updateSnippet.content);
+
         const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet.content, {
-            headers,
+            headers: {
+                ...headers,
+                'Content-Type': 'text/plain',
+            },
             params: {
                 snippetId: id,
             },
         });
-
         const snippet: Snippet = {
             id: response.data.id,
             name: response.data.name,
@@ -141,6 +134,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getUserFriends(name?: string, page?: number, pageSize?: number): Promise<PaginatedUsers> {
         //TODO (ver tema paginado)
+        console.log("Fetching users...");
         const response = await axios.get(`${this.baseUrl}/permissions/users`, {
             headers: this.getHeaders(),
             params: {
@@ -149,6 +143,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 name
             }
         });
+        console.log("Users:", JSON.stringify(response.data, null, 2));
         return response.data;
     }
 
