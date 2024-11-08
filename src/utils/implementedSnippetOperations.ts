@@ -191,9 +191,9 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return response.data;
     }
 
-    async formatSnippet(snippet: string): Promise<string> {
+    async formatSnippet(snippetId: string): Promise<string> {
         // TODO (te paso el codigo y el token)
-        const response = await axios.post(`${this.baseUrl}/printscript/format`, {snippet}, {
+        const response = await axios.post(`${this.baseUrl}/snippets/format/${snippetId}`, {
             headers: this.getHeaders(),
         });
         return response.data;
@@ -209,20 +209,14 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         };
 
         const headers = await this.getHeaders();
-        console.log("Posting test case with: ", defaultTestType);
-
         const response = await axios.post(`${this.baseUrl}/snippets/testcase`, defaultTestType, {
             headers,
         });
-
-        console.log("Response: ", response);
         return response.data;
     }
 
 
-
     async removeTestCase(id: string): Promise<string> {
-        // TODO no implementado
         const response = await axios.delete(`${this.baseUrl}/snippets/testcase/${id}`, {
             headers: this.getHeaders(),
         });
@@ -230,7 +224,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async deleteSnippet(id: string): Promise<string> {
-        // TODO
         const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
             headers: this.getHeaders(),
         });
@@ -238,16 +231,11 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
-        // TODO
-        console.log("Testing snippet with: ", testCase);
         const headers = await this.getHeaders();
 
         const response = await axios.get(`${this.baseUrl}/snippets/testcase/run/${testCase.snippetId}`, {
             headers,
         });
-
-        console.log("Response: ", response);
-
         return this.mapTestResultToCorresponding(response.data);
     }
 
@@ -265,7 +253,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
-        // TODO
         const headers = await this.getHeaders();
         const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, newRules, {
             headers,
@@ -275,7 +262,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
 
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
-        // TODO
         const headers = await this.getHeaders();
         const response = await axios.put(`${this.baseUrl}/snippets/rules/linting`, newRules, {
             headers,
