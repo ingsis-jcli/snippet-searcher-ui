@@ -107,14 +107,14 @@ export const useShareSnippet = () => {
     );
 };
 
-export const useGetTestCases = () => {
+export const useGetTestCases = (snippetId: string) => {
     const { snippetOperations, loading } = useSnippetsOperations();
 
     return useQuery<TestCase[] | undefined, Error>(
-        ['testCases'],
-        () => snippetOperations!.getTestCases(),
+        ['testCases', snippetId],
+        () => snippetOperations!.getTestCases(snippetId),
         {
-            enabled: !loading && !!snippetOperations,
+            enabled: !loading && !!snippetOperations && !!snippetId,
         }
     );
 };

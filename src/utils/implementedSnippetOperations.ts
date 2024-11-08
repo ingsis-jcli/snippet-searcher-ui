@@ -184,9 +184,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return response.data;
     }
 
-    async getTestCases(): Promise<TestCase[]> {
-        // TODO (no se cual es)
-        const response = await axios.get(`${this.baseUrl}/snippets/testcase`, {
+    async getTestCases(snippetId: string): Promise<TestCase[]> {
+        const response = await axios.get(`${this.baseUrl}/snippets/testcase/${snippetId}`, {
             headers: this.getHeaders(),
         });
         return response.data;
