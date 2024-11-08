@@ -58,7 +58,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             compliance: this.mapProcessStatusToComplianceEnum(snippet.compliance),
             author: snippet.author,
         }));
-        console.log("Snippets:", JSON.stringify(snippets, null, 2));
         return {
             page,
             page_size: pageSize,
@@ -75,8 +74,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             language: language,
             version: version,
         };
-        console.log("Payload:", JSON.stringify(payload, null, 2));
-        console.log("Creating snippet at: " + `${this.baseUrl}/snippets/snippet`);
         const headers = await this.getHeaders();
         const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
             headers,
@@ -90,7 +87,6 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
             author: response.data.author,
         }
-        console.log("Snippet created:", JSON.stringify(snippet, null, 2));
         return snippet;
     }
 
@@ -112,15 +108,11 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
             author: response.data.author,
         }
-        console.log("Snippet get:", JSON.stringify(snippet, null, 2));
         return snippet;
     }
 
     async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
         const headers = await this.getHeaders();
-        console.log("Performing update at: " + `${this.baseUrl}/snippets/snippet?snippetId=${id}`);
-        console.log("Content: " + updateSnippet.content);
-
         const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet.content, {
             headers: {
                 ...headers,
@@ -139,11 +131,10 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
             author: response.data.author,
         }
-        console.log("Snippet edit:", JSON.stringify(snippet, null, 2));
         return snippet;
     }
 
-    async getUserFriends(name?: string, page?: number, pageSize?: number): Promise<PaginatedUsers> {
+    async getUserFriends(name?: string, page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
         console.log("Fetching users...");
         const response = await axios.get(`${this.baseUrl}/permissions/users`, {
             headers: this.getHeaders(),
@@ -154,11 +145,14 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             }
         });
 
-        console.log("Users:", JSON.stringify(response.data, null, 2));
-        const users: User[] = response.data.users.map((user: { email: string; id: string }) => ({
-            name: user.email,
-            id: user.id,
-        }));
+        console.log("Raw Response:", JSON.stringify(response.data, null, 2));
+
+        const users : User[] = Array.isArray(response.data.users)
+            ? response.data.users.map((user: { id: string; email: string }) => ({
+                name: user.email,
+                id: user.id,
+            }))
+            : [];
 
         const paginatedUsers: PaginatedUsers = {
             page: response.data.page,
@@ -171,11 +165,14 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return paginatedUsers;
     }
 
-
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
         // TODO (ver tema email)
-        const response = await axios.post(`${this.baseUrl}/snippets/${snippetId}/share`, {userId}, {
+        const  response = await axios.post(`${this.baseUrl}/snippets/share`, null, {
             headers: this.getHeaders(),
+            params: {
+                snippetId,
+                userId,
+            },
         });
         return response.data;
     }
