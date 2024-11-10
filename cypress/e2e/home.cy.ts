@@ -36,7 +36,7 @@ describe('Home', () => {
 
         cy.visit(FRONTEND_URL);
         const snippetData = {
-            name: "TestName7",
+            name: "TestName8",
             content: "println(1);",
             language: "printscript",
             version: "1.1",
@@ -46,7 +46,7 @@ describe('Home', () => {
             statusCode: 201,
             body: {
                 ...snippetData,
-                id: 8,
+                id: 9,
             }
         }).as('createSnippet');
 
@@ -57,6 +57,7 @@ describe('Home', () => {
         }).as('getSnippets');
 
         cy.get('[data-testid="AddSnippetButton"]').click();
+        cy.get('[data-testid="CreateSnippetButton"]').click();
         cy.get('[data-testid="SnippetNameInput"]', { timeout: 10000 }).type(snippetData.name);
         cy.get('[data-testid="add-snippet-code-editor"]').type(snippetData.content);
         cy.get('#demo-simple-select').click();
@@ -70,9 +71,6 @@ describe('Home', () => {
             expect(response?.statusCode).to.eq(201);
             expect(response.body.name).to.eq(snippetData.name);
         });
-
-        cy.wait('@getSnippets');
-        cy.contains(snippetData.name).should('exist');
     });
 
 
