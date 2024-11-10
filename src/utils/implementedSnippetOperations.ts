@@ -42,14 +42,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             owner: false,
             shared: false,
         };
+
         if (snippetName) {
             params.name = snippetName;
         }
+
         const response = await axios.get(`${this.baseUrl}/snippets/snippet/search`, {
             headers,
             params,
         });
-        const snippets = response.data.map((snippet: SnippetResponse) => ({
+
+        const snippets = Array.isArray(response.data) ? response.data.map((snippet: SnippetResponse) => ({
             id: snippet.id,
             name: snippet.name,
             content: snippet.content,
@@ -57,8 +60,10 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             extension: snippet.extension,
             compliance: this.mapProcessStatusToComplianceEnum(snippet.compliance),
             author: snippet.author,
-        }));
+        })) : [];
+
         console.log("Snippets with pagination " , snippets)
+
         return {
             page,
             page_size: pageSize,
