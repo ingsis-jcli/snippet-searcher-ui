@@ -1,4 +1,4 @@
-name: "Continuous Deployment - Snippet UI"
+name: "Continuous Deployment - Dev Snippet UI"
 
 on:
   push:
@@ -48,12 +48,12 @@ jobs:
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VM_HOST}}
+          host: ${{ secrets.VM_HOST_DEV}}
           username: ${{ secrets.VM_USER}}
           key: ${{ secrets.VM_KEY }}
           script: |
             pwd
             cd infra
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login -u ${{ github.actor }} --password-stdin ghcr.io
-            sudo docker-compose -f docker-compose.dev.yml pull snippet-searcher-ui
-            sudo docker-compose -f docker-compose.dev.yml up -d snippet-searcher-ui
+            sudo docker-compose -f docker-compose.dev.yml pull ui-service
+            sudo docker-compose -f docker-compose.dev.yml up -d ui-service
