@@ -31,43 +31,49 @@ describe('Home', () => {
         first10Snippets.should('have.length.lessThan', 10)
     })
 
-    it('Can creat snippet find snippets by name', () => {
-        cy.visit(FRONTEND_URL)
+    it('Can create snippet and find snippets by name', () => {
+        cy.loginToAuth0(AUTH0_USERNAME, AUTH0_PASSWORD); // Asegura que el token esté en localStorage
+
+        cy.visit(FRONTEND_URL);
         const snippetData = {
             name: "Test name",
             content: "println(1);",
             language: "printscript",
             version: "1.1",
-        }
+        };
 
-        cy.intercept('GET', BACKEND_URL + "/snippets*", (req) => {
+        cy.intercept('GET', `${BACKEND_URL}/snippets*`, (req) => {
             req.reply((res) => {
                 expect(res.statusCode).to.eq(200);
             });
         }).as('getSnippets');
 
-        cy.request({
-            method: 'POST',
-            url: '/api/snippets/snippet', // Adjust if you have a different base URL configured in Cypress
-            body: snippetData,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("authAccessToken")}`,
-            },
-            failOnStatusCode: false // Optional: set to true if you want the test to fail on non-2xx status codes
-        }).then((response) => {
-            expect(response.status).to.eq(200);
+        cy.window().then((win) => {
+            const accessToken = win.localStorage.getItem("authAccessToken");
 
-            expect(response.body.name).to.eq(snippetData.name)
-            expect(response.body.content).to.eq(snippetData.content)
-            expect(response.body.language).to.eq(snippetData.language)
-            expect(response.body).to.haveOwnProperty("id")
+            cy.request({
+                method: 'POST',
+                url: `${BACKEND_URL}/api/snippets/snippet`,
+                body: snippetData,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`, // Usa el token de localStorage
+                },
+                failOnStatusCode: false
+            }).then((response) => {
+                expect(response.status).to.eq(200);
+                expect(response.body.name).to.eq(snippetData.name);
+                expect(response.body.content).to.eq(snippetData.content);
+                expect(response.body.language).to.eq(snippetData.language);
+                expect(response.body).to.haveOwnProperty("id");
 
-            cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').clear();
-            cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').type(snippetData.name + "{enter}");
+                cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').clear();
+                cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').type(`${snippetData.name}{enter}`);
 
-            cy.wait("@getSnippets")
-            cy.contains(snippetData.name).should('exist');
-        })
-    })
+                cy.wait("@getSnippets");
+                cy.contains(snippetData.name).should('exist');
+            });
+        });
+    });
+
 })

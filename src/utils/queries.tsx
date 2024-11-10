@@ -18,9 +18,8 @@ const useToken = () => {
             try {
                 const fetchedToken = await getAccessTokenSilently();
                 setToken(fetchedToken);
-                localStorage.setItem('authAccessToken', token!);
-                console.log("Fetched token:", fetchedToken);
-                console.log("Token:", localStorage.getItem('authAccessToken'));
+                localStorage.setItem('authAccessToken', fetchedToken);
+                console.log("Token retrieved:", localStorage.getItem('authAccessToken'));
             } catch (error) {
                 console.error("Error fetching token:", error);
             } finally {
