@@ -135,26 +135,38 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return snippet;
     }
 
-    async getUserFriends(name?: string, page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
-        const params : {page: number, pageSize: number, name?: string } = { page, pageSize, name };
-        const response = await axios.get(`${this.baseUrl}/permissions/users`, {
-            headers: this.getHeaders(),
-            params,
-        });
-        const users: User[] = Array.isArray(response.data.users)
-            ? response.data.users.map((user: { id: string; email: string }) => ({
-                name: user.email,
-                id: user.id,
-            }))
-            : [];
+    async getUserFriends(name: string = '', page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
+        const params = { page, pageSize, name };
 
-        const paginatedUsers: PaginatedUsers = {
-            page: response.data.page,
-            page_size: response.data.pageSize,
-            count: response.data.count,
-            users,
-        };
-        return paginatedUsers;
+        try {
+            const { data } = await axios.get(`${this.baseUrl}/permissions/users`, {
+                headers: this.getHeaders(),
+                params,
+            });
+
+            const { page: responsePage, pageSize: responsePageSize, count, users = [] } = data;
+
+            const mappedUsers: User[] = users.map(({ id, email }: { id: string; email: string }) => ({
+                id,
+                name: email,
+            }));
+
+            return {
+                page: responsePage,
+                page_size: responsePageSize,
+                count,
+                users: mappedUsers,
+            };
+
+        } catch (error) {
+            console.error('Error fetching user friends:', error);
+            return {
+                page: 0,
+                page_size: 0,
+                count: 0,
+                users: [],
+            };
+        }
     }
 
 
