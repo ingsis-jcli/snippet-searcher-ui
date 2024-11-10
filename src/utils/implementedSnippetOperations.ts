@@ -232,10 +232,10 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return response.data;
     }
 
-    async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
+    async testSnippet(id: string): Promise<TestCaseResult> {
         const headers = await this.getHeaders();
 
-        const response = await axios.get(`${this.baseUrl}/snippets/testcase/run/${testCase.snippetId}`, {
+        const response = await axios.get(`${this.baseUrl}/snippets/testcase/run/${id}`, {
             headers,
         });
         return this.mapTestResultToCorresponding(response.data);

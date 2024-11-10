@@ -18,6 +18,11 @@ export const TabPanel = ({value, index, test: initialTest, setTestCase, removeTe
 
     const {mutateAsync: testSnippet, data} = useTestSnippet();
 
+    const handleTestSnippet = async () => {
+        if (testData?.id) {
+            await testSnippet(testData.id);
+        }
+    };
 
     return (
         <div
@@ -89,8 +94,7 @@ export const TabPanel = ({value, index, test: initialTest, setTestCase, removeTe
                         <Button disabled={!testData?.name} onClick={() => setTestCase({...testData, snippetId} ?? {})} variant={"outlined"} startIcon={<Save/>}>
                             Save
                         </Button>
-                        <Button onClick={() => testSnippet({...testData, snippetId} ?? {})} variant={"contained"} startIcon={<BugReport/>}
-                                disableElevation>
+                        <Button onClick={handleTestSnippet} variant={"contained"} startIcon={<BugReport />} disableElevation>
                             Test
                         </Button>
                         {data && (data === "success" ? <Chip label="Pass" color="success"/> :

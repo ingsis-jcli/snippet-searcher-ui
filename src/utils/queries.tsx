@@ -143,8 +143,8 @@ export type TestCaseResult = "success" | "fail";
 export const useTestSnippet = () => {
     const { snippetOperations } = useSnippetsOperations();
 
-    return useMutation<TestCaseResult, Error, Partial<TestCase>>(
-        (tc) => snippetOperations!.testSnippet(tc)
+    return useMutation<TestCaseResult, Error, string>(
+        (id: string) => snippetOperations!.testSnippet(id)
     );
 };
 
