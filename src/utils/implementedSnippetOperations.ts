@@ -186,15 +186,17 @@ export class ImplementedSnippetOperations implements SnippetOperations {
     }
 
     async getTestCases(snippetId: string): Promise<TestCase[]> {
+        const headers = await this.getHeaders();
         const response = await axios.get(`${this.baseUrl}/snippets/testcase/${snippetId}`, {
-            headers: this.getHeaders(),
+            headers
         });
         return response.data;
     }
 
     async formatSnippet(snippetId: string): Promise<string> {
+        const headers = await this.getHeaders();
         const response = await axios.post(`${this.baseUrl}/snippets/snippet/format/${snippetId}`, {
-            headers: this.getHeaders(),
+            headers
         });
         return response.data;
     }
