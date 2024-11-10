@@ -1,7 +1,8 @@
-name: "Continuous Deployment - Prod Snippet UI"
-
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -55,5 +56,5 @@ jobs:
             pwd
             cd infra
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login -u ${{ github.actor }} --password-stdin ghcr.io
-            sudo docker-compose -f docker-compose.dev.yml pull snippet-searcher-ui
-            sudo docker-compose -f docker-compose.dev.yml up -d snippet-searcher-ui
+            sudo docker-compose -f docker-compose.prod.yml pull snippet-searcher-ui
+            sudo docker-compose -f docker-compose.prod.yml up -d snippet-searcher-ui

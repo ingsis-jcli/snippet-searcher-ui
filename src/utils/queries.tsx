@@ -18,7 +18,9 @@ const useToken = () => {
             try {
                 const fetchedToken = await getAccessTokenSilently();
                 setToken(fetchedToken);
+                localStorage.setItem('authAccessToken', token!);
                 console.log("Fetched token:", fetchedToken);
+                console.log("Token:", localStorage.getItem('authAccessToken'));
             } catch (error) {
                 console.error("Error fetching token:", error);
             } finally {
@@ -105,14 +107,14 @@ export const useShareSnippet = () => {
     );
 };
 
-export const useGetTestCases = () => {
+export const useGetTestCases = (snippetId: string) => {
     const { snippetOperations, loading } = useSnippetsOperations();
 
     return useQuery<TestCase[] | undefined, Error>(
-        ['testCases'],
-        () => snippetOperations!.getTestCases(),
+        ['testCases', snippetId],
+        () => snippetOperations!.getTestCases(snippetId),
         {
-            enabled: !loading && !!snippetOperations,
+            enabled: !loading && !!snippetOperations && !!snippetId,
         }
     );
 };
@@ -141,8 +143,8 @@ export type TestCaseResult = "success" | "fail";
 export const useTestSnippet = () => {
     const { snippetOperations } = useSnippetsOperations();
 
-    return useMutation<TestCaseResult, Error, Partial<TestCase>>(
-        (tc) => snippetOperations!.testSnippet(tc)
+    return useMutation<TestCaseResult, Error, string>(
+        (id: string) => snippetOperations!.testSnippet(id)
     );
 };
 
@@ -196,7 +198,7 @@ export const useFormatSnippet = () => {
     const { snippetOperations } = useSnippetsOperations();
 
     return useMutation<string, Error, string>(
-        (snippetContent) => snippetOperations!.formatSnippet(snippetContent)
+        (snippetId) => snippetOperations!.formatSnippet(snippetId)
     );
 };
 

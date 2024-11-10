@@ -38,7 +38,7 @@ jobs:
         with:
           push: true
           tags: |
-           ghcr.io/ingsis-jcli/snippet-ui:latest
+           ghcr.io/ingsis-jcli/snippet-ui-dev:latest
           build-args: |
             USERNAME=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}

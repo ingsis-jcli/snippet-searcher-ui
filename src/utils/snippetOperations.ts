@@ -22,7 +22,7 @@ export interface SnippetOperations {
 
   getLintingRules(): Promise<Rule[]>
 
-  getTestCases(): Promise<TestCase[]>
+  getTestCases(snippetId: string): Promise<TestCase[]>
 
   formatSnippet(snippet: string): Promise<string>
 
@@ -32,7 +32,7 @@ export interface SnippetOperations {
 
   deleteSnippet(id: string): Promise<string>
 
-  testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult>
+  testSnippet(id: string): Promise<TestCaseResult>
 
   getFileTypes(): Promise<FileType[]>
 
