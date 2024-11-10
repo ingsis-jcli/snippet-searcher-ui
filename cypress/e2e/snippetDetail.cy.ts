@@ -12,7 +12,7 @@ describe('Add snippet tests', () => {
       statusCode: 201,
       body: fakeStore.getSnippetById("1"),
     }).as("getSnippetById")
-    cy.intercept('GET', BACKEND_URL+"/snippets").as("getSnippets")
+    cy.intercept('GET', BACKEND_URL+"/snippets/snippet/search?page=0&size=10&owner=false&shared=false").as("getSnippets")
 
     cy.visit("/")
 

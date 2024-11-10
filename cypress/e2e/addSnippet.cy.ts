@@ -35,19 +35,19 @@ describe('Add snippet tests', () => {
     cy.intercept('POST', BACKEND_URL+"/snippets/snippet", (req) => {
       req.reply((res) => {
         expect(res.body).to.include.keys("id","name","content","language")
-        expect(res.statusCode).to.eq(200);
+        expect(res.statusCode).to.eq(201);
       });
     }).as('postRequest');
 
     /* ==== Generated with Cypress Studio ==== */
       cy.get('[data-testid="AddSnippetButton"]').click();
 
-      cy.get('[data-testid="LoadFromFile"]').click();
+      cy.get('[data-testid="LoadFromFileButton"]').click();
 
       cy.get('[data-testid="upload-file-input"').selectFile("cypress/fixtures/example_ps.ps", {force: true})
 
       cy.get('button:contains("Save Snippet")').click();
 
-    cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
+    cy.wait('@postRequest').its('response.statusCode').should('eq', 201);
   })
 })
