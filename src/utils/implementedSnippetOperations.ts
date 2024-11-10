@@ -205,8 +205,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const defaultTestType = {
             name: testCase.name,
             snippetId: testCase.snippetId,
-            input: testCase.input,
-            output: testCase.output,
+            input: testCase.input ?? [],
+            output: testCase.output ?? [],
             type: "VALID",
         };
 
