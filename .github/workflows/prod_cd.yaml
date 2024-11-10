@@ -1,9 +1,9 @@
-name: "Continuous Deployment - Dev Snippet UI"
+name: "Continuous Deployment - Prod Snippet UI"
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   build_and_deploy:
@@ -38,7 +38,7 @@ jobs:
         with:
           push: true
           tags: |
-           ghcr.io/ingsis-jcli/snippet-ui:latest
+            ghcr.io/ingsis-jcli/snippet-ui:latest
           build-args: |
             USERNAME=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VM_HOST_DEV}}
+          host: ${{ secrets.VM_HOST_PROD}}
           username: ${{ secrets.VM_USER}}
           key: ${{ secrets.VM_KEY }}
           script: |
