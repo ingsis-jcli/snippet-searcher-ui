@@ -18,11 +18,11 @@ describe('Add snippet tests', () => {
 
     cy.wait("@getSnippets")
     // cy.wait(2000) // TODO comment this line and uncomment 19 to wait for the real data
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').click();
+    cy.get('[data-testid="snippet-row-1"]').click();
   })
 
   it('Can share a snippet ', () => {
-    cy.get('[aria-label="Share"]').click();
+    cy.get('[data-testid="ShareButton"]').click();
     cy.get('#\\:rl\\:').click();
     cy.get('#\\:rl\\:-option-0').click();
     cy.get('.css-1yuhvjn > .MuiBox-root > .MuiButton-contained').click();

@@ -113,7 +113,7 @@ export const SnippetTable = (props: SnippetTableProps) => {
                         <>
                             {
                                 snippets && snippets.map((snippet) => (
-                                    <SnippetRow data-testid={"snippet-row"}
+                                    <SnippetRow data-testid={`snippet-row-${snippet.id}`}
                                                 onClick={() => handleClickSnippet(snippet.id)} key={snippet.id} snippet={snippet}/>
                                 ))
                             }
