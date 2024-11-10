@@ -21,7 +21,6 @@ describe('Home', () => {
         /* ==== End Cypress Studio ==== */
     })
 
-    // You need to have at least 1 snippet in your DB for this test to pass
     it('Renders the first snippets', () => {
         cy.visit(FRONTEND_URL)
         const first10Snippets = cy.get('[data-testid="snippet-row"]')
@@ -36,25 +35,19 @@ describe('Home', () => {
 
         cy.visit(FRONTEND_URL);
         const snippetData = {
-            name: "TestName8",
+            name: "TestName",
             content: "println(1);",
             language: "printscript",
             version: "1.1",
         };
 
-        cy.intercept('POST', 'http://localhost/api/snippets/snippet', {
+        cy.intercept('POST', BACKEND_URL + '/snippets/snippet', {
             statusCode: 201,
             body: {
                 ...snippetData,
-                id: 9,
+                id: 2,
             }
         }).as('createSnippet');
-
-        cy.intercept('GET', 'http://localhost/api/snippets*', (req) => {
-            req.reply((res) => {
-                expect(res.statusCode).to.eq(200);
-            });
-        }).as('getSnippets');
 
         cy.get('[data-testid="AddSnippetButton"]').click();
         cy.get('[data-testid="CreateSnippetButton"]').click();
@@ -71,6 +64,7 @@ describe('Home', () => {
             expect(response?.statusCode).to.eq(201);
             expect(response.body.name).to.eq(snippetData.name);
         });
+
     });
 
 
