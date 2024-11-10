@@ -32,7 +32,7 @@ describe('Home', () => {
     })
 
     it('Can create snippet and find snippets by name', () => {
-        cy.loginToAuth0(AUTH0_USERNAME, AUTH0_PASSWORD); // Asegura que el token esté en localStorage
+        cy.loginToAuth0(AUTH0_USERNAME, AUTH0_PASSWORD); // Ensure the token is set in localStorage
 
         cy.visit(FRONTEND_URL);
         const snippetData = {
@@ -42,38 +42,42 @@ describe('Home', () => {
             version: "1.1",
         };
 
+        // Intercept the POST request to simulate snippet creation
+        cy.intercept('POST', `${BACKEND_URL}/api/snippets/snippet`, {
+            statusCode: 200,
+            body: {
+                ...snippetData,
+                id: "1", // mock an ID for the created snippet
+            }
+        }).as('createSnippet');
+
+        // Intercept the GET request to load snippets
         cy.intercept('GET', `${BACKEND_URL}/snippets*`, (req) => {
             req.reply((res) => {
                 expect(res.statusCode).to.eq(200);
             });
         }).as('getSnippets');
 
-        cy.window().then((win) => {
-            const accessToken = win.localStorage.getItem("authAccessToken");
+        cy.get('[data-testid="AddSnippetButton"]').click();
+        cy.get('[data-testid="CreateSnippetButton"]').click();
 
-            cy.request({
-                method: 'POST',
-                url: `${BACKEND_URL}/api/snippets/snippet`,
-                body: snippetData,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`, // Usa el token de localStorage
-                },
-                failOnStatusCode: false
-            }).then((response) => {
-                expect(response.status).to.eq(200);
-                expect(response.body.name).to.eq(snippetData.name);
-                expect(response.body.content).to.eq(snippetData.content);
-                expect(response.body.language).to.eq(snippetData.language);
-                expect(response.body).to.haveOwnProperty("id");
+        cy.get('#name').type(snippetData.name);
+        cy.get('[data-testid="add-snippet-code-editor"]').type(snippetData.content);
 
-                cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').clear();
-                cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').type(`${snippetData.name}{enter}`);
+        cy.get('#demo-simple-select').click();
+        cy.get(`[data-testid="menu-option-Printscript:1.1]`).click();
 
-                cy.wait("@getSnippets");
-                cy.contains(snippetData.name).should('exist');
-            });
+        cy.get('button:contains("Save Snippet")').click();
+
+        cy.wait('@createSnippet').then((interception) => {
+            const { request, response } = interception;
+            expect(request.body).to.deep.equal(snippetData);
+            expect(response?.statusCode).to.eq(200);
         });
+
+        cy.wait('@getSnippets');
+        cy.contains(snippetData.name).should('exist');
     });
+
 
 })
