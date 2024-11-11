@@ -191,7 +191,12 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const response = await axios.get(`${this.baseUrl}/snippets/rules/formatting`, {
             headers
         });
-        return response.data;
+        return response.data.map((rule: { id: string; name: string; value: string | null; numericValue: number | null; isActive: boolean }) => ({
+            id: rule.id,
+            name: rule.name,
+            isActive: rule.isActive,
+            value: rule.numericValue,
+        }));
     }
 
     async getLintingRules(): Promise<Rule[]> {
@@ -273,11 +278,22 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
         const headers = await this.getHeaders();
-        const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, newRules, {
+
+        const formattedRules = newRules.map(rule => ({
+            id: rule.id,
+            name: rule.name,
+            isActive: rule.isActive,
+            numericValue: typeof rule.value === 'number' ? rule.value : null,
+            value: typeof rule.value === 'string' ? rule.value : null
+        }));
+
+        const response = await axios.put(`${this.baseUrl}/snippets/rules/formatting`, formattedRules, {
             headers,
         });
+
         return response.data;
     }
+
 
 
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
