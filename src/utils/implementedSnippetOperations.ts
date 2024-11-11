@@ -52,7 +52,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             params,
         });
 
-        const snippets = Array.isArray(response.data) ? response.data.map((snippet: SnippetResponse) => ({
+        const snippets = Array.isArray(response.data.snippets) ? response.data.snippets.map((snippet: SnippetResponse) => ({
             id: snippet.id,
             name: snippet.name,
             content: snippet.content,
@@ -67,7 +67,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return {
             page,
             page_size: pageSize,
-            count: snippets.length,
+            count: response.data.count,
             snippets,
         };
     }
@@ -80,20 +80,28 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             language: language,
             version: version,
         };
+
         const headers = await this.getHeaders();
-        const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
-            headers,
-        });
-        const snippet: Snippet = {
-            id: response.data.id,
-            name: response.data.name,
-            content: response.data.content,
-            language: response.data.language,
-            extension: response.data.extension,
-            compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
-            author: response.data.author,
+
+        try {
+            const response = await axios.post(`${this.baseUrl}/snippets/snippet`, payload, {
+                headers,
+            });
+
+            const snippet: Snippet = {
+                id: response.data.id,
+                name: response.data.name,
+                content: response.data.content,
+                language: response.data.language,
+                extension: response.data.extension,
+                compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
+                author: response.data.author,
+            }
+            return snippet;
+        } catch (_) {
+            alert("Failed to create snippet")
+            throw Error("Failed to create snippet")
         }
-        return snippet;
     }
 
 
