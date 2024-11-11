@@ -52,6 +52,10 @@ export class ImplementedSnippetOperations implements SnippetOperations {
             params,
         });
 
+        const countResponse = await axios.get(`${this.baseUrl}/snippets/snippet/count`, {
+            headers,
+        });
+
         const snippets = Array.isArray(response.data) ? response.data.map((snippet: SnippetResponse) => ({
             id: snippet.id,
             name: snippet.name,
@@ -67,7 +71,7 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         return {
             page,
             page_size: pageSize,
-            count: snippets.length,
+            count: countResponse.data,
             snippets,
         };
     }
