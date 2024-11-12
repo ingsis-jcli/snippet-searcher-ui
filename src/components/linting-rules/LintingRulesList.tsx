@@ -69,6 +69,7 @@ const LintingRulesList = () => {
                 checked={rule.isActive}
                 disableRipple
                 onChange={toggleRule(rule)}
+                sx = {{color: '#7281f6'}}
               />
               <ListItemText primary={rule.name} />
               {typeof rule.value === 'number' ?

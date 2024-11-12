@@ -67,8 +67,10 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                             disableRipple
                             sx={{boxShadow: 0}}
                             onClick={handleCreateSnippet}>
-                        <Box pr={1} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                            {loadingSnippet ? <CircularProgress size={24}/> : <Save sx={{color: '#7281f6'}}/>}
+                        <Box sx={{ "&:hover": {
+                                backgroundColor: '#ed7ee5'
+                            }}} pr={1} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+                            {loadingSnippet ? <CircularProgress size={24}/> : <Save/>}
                         </Box>
                         Save Snippet
                     </Button>
