@@ -8,6 +8,7 @@ describe('Add snippet tests', () => {
     )
   })
   it('Can add snippets manually', () => {
+    cy.wait(2000)
     cy.visit("/")
     cy.intercept('POST', BACKEND_URL+"/snippets/snippet", (req) => {
       req.reply((res) => {
@@ -31,6 +32,7 @@ describe('Add snippet tests', () => {
   })
 
   it('Can add snippets via file', () => {
+    cy.wait(2000)
     cy.visit("/")
     cy.intercept('POST', BACKEND_URL+"/snippets/snippet", (req) => {
       req.reply((res) => {

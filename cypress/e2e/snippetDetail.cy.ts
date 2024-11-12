@@ -9,10 +9,10 @@ describe('Add snippet tests', () => {
 
     cy.intercept('GET', BACKEND_URL + "/snippets/snippet/search*", {
       statusCode: 200,
-      body: [snippet],
+      body: searchResult,
     }).as("getSnippets")
 
-    cy.intercept('GET', BACKEND_URL + "/snippets/snippet?snippetId=1", {
+    cy.intercept('GET', BACKEND_URL + "/snippets/snippet?snippetId*", {
       statusCode: 200,
       body: snippet,
     }).as("getSnippetById")
@@ -38,7 +38,7 @@ describe('Add snippet tests', () => {
   })
 
   it('Can share a snippet ', () => {
-    cy.wait(2000)
+    cy.wait(3000)
     cy.get('[aria-label="Share"]').click();
     cy.get('button[aria-label="Open"]').click();
     cy.get('[role="listbox"] li:nth-child(1)').click();
@@ -55,16 +55,19 @@ describe('Add snippet tests', () => {
   */
 
   it('Can format snippets', function() {
+    cy.wait(3000)
     cy.get('[data-testid="ReadMoreIcon"] > path').click();
   });
 
   it('Can save snippets', function() {
+    cy.wait(3000)
     cy.get('.css-10egq61 > .MuiBox-root > div > .npm__react-simple-code-editor__textarea').click();
     cy.get('.css-10egq61 > .MuiBox-root > div > .npm__react-simple-code-editor__textarea').type("println(2);");
     cy.get('[data-testid="SaveIcon"] > path').click();
   });
 
   it('Can delete snippets', function() {
+    cy.wait(3000)
     cy.get('[data-testid="DeleteIcon"] > path').click();
   });
 })
@@ -78,4 +81,9 @@ const snippet = {
   compliance: 'pending',
   author: 'auth0|6713367e70200200728782b5',
   owner: 'auth0|6713367e70200200728782b5',
+}
+
+const searchResult = {
+    count: 1,
+    snippets: [snippet]
 }
