@@ -39,8 +39,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         const params: { page: number; size: number; owner: boolean; shared: boolean; name?: string } = {
             page,
             size: pageSize,
-            owner: false,
-            shared: false,
+            owner: true,
+            shared: true,
         };
 
         if (snippetName) {
