@@ -23,7 +23,7 @@ export const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     return (
-        <AppBar position="static" elevation={0}>
+        <AppBar position="static" elevation={0}  sx={{ backgroundColor: '#bac2fa' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{display: "flex", gap: "24px"}}>
                     <Typography
