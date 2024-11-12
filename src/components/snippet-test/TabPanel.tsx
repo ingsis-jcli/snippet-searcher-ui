@@ -93,7 +93,7 @@ export const TabPanel = ({ value, index, test: initialTest, setTestCase, removeT
                                 color={"error"}
                                 startIcon={<Delete />}
                             >
-                                RemoFve
+                                Remove
                             </Button>
                         )}
                         <Button
@@ -101,11 +101,12 @@ export const TabPanel = ({ value, index, test: initialTest, setTestCase, removeT
                             onClick={handleSaveTestCase}
                             variant={"outlined"}
                             startIcon={<Save />}
-                            sx={{backgroundColor: '#7281f6'}}
                         >
                             Save
                         </Button>
-                        <Button onClick={handleTestSnippet} variant={"contained"} startIcon={<BugReport />} disableElevation>
+                        <Button onClick={handleTestSnippet} sx={{backgroundColor: '#7281f6', "&:hover": {
+                                backgroundColor: '#ed7ee5'
+                            }}} variant={"contained"} startIcon={<BugReport />} disableElevation>
                             Test
                         </Button>
                         {data && (data === "success" ? <Chip label="Pass" color="success" /> : <Chip label="Fail" color="error" />)}

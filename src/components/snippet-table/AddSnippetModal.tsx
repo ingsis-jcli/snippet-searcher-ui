@@ -65,10 +65,10 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                     </Typography>
                     <Button disabled={!snippetName || !code || !language || loadingSnippet} variant="contained"
                             disableRipple
-                            sx={{boxShadow: 0, backgroundColor: '#7281f6'}}
+                            sx={{boxShadow: 0}}
                             onClick={handleCreateSnippet}>
                         <Box pr={1} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                            {loadingSnippet ? <CircularProgress size={24}/> : <Save/>}
+                            {loadingSnippet ? <CircularProgress size={24}/> : <Save sx={{color: '#7281f6'}}/>}
                         </Box>
                         Save Snippet
                     </Button>
