@@ -93,7 +93,7 @@ export const TabPanel = ({ value, index, test: initialTest, setTestCase, removeT
                                 color={"error"}
                                 startIcon={<Delete />}
                             >
-                                Remove
+                                RemoFve
                             </Button>
                         )}
                         <Button
@@ -101,6 +101,7 @@ export const TabPanel = ({ value, index, test: initialTest, setTestCase, removeT
                             onClick={handleSaveTestCase}
                             variant={"outlined"}
                             startIcon={<Save />}
+                            sx={{backgroundColor: '#7281f6'}}
                         >
                             Save
                         </Button>
