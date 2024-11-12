@@ -232,18 +232,10 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getTestCases(snippetId: string): Promise<TestCase[]> {
         const headers = await this.getHeaders();
-        try {
             const response = await axios.get(`${this.baseUrl}/snippets/testcase/${snippetId}`, {
                 headers
             });
             return response.data;
-        }
-        catch (error) {
-            const axiosError = error as AxiosError<ErrorResponseData>;
-            const errorMessage = axiosError.response?.data?.message || "Failed to get test cases for snippet";
-            alert(errorMessage);
-            throw new Error(errorMessage);
-        }
     }
 
     async formatSnippet(snippetId: string): Promise<string> {
