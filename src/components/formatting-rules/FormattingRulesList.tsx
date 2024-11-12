@@ -69,6 +69,9 @@ const FormattingRulesList = () => {
                 checked={rule.isActive}
                 disableRipple
                 onChange={toggleRule(rule)}
+                sx = {{'&.Mui-checked': {
+                        color: '#7281f6'
+                    }}}
               />
               <ListItemText primary={rule.name} />
               {typeof rule.value === 'number' ?
