@@ -22,15 +22,15 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     borderBottomRightRadius: theme.shape.borderRadius,
   },
   '&:hover > td': {
-    borderTop: `2px ${theme.palette.primary.light} solid`,
-    borderBottom: `2px ${theme.palette.primary.light} solid`,
-    backgroundColor: alpha(theme.palette.primary.light, 0.2)
+    borderTop: `2px #6774dd solid`,
+    borderBottom: `2px #6774dd solid`,
+    backgroundColor: alpha('#6774dd', 0.2)
   },
   '&:hover > td:first-of-type': {
-    borderLeft: `2px ${theme.palette.primary.light} solid`,
+    borderLeft: `2px #6774dd solid`,
   },
   '&:hover > td:last-of-type': {
-    borderRight: `2px ${theme.palette.primary.light} solid`
+    borderRight: `2px #6774dd solid`
   },
 }));
 

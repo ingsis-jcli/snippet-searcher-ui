@@ -88,7 +88,7 @@ const LintingRulesList = () => {
           )
         })}
       </List>
-      <Button sx={{color: '#7281f6'}} disabled={isLoading} variant={"contained"} onClick={() => mutateAsync(rules ?? [])}>Save</Button>
+      <Button sx={{backgroundColor: '#7281f6'}} disabled={isLoading} variant={"contained"} onClick={() => mutateAsync(rules ?? [])}>Save</Button>
     </Card>
 
   );

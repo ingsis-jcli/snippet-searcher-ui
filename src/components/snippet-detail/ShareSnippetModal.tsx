@@ -47,7 +47,7 @@ export const ShareSnippetModal = (props: ShareSnippetModalProps) => {
           />
           <Box mt={4} display={"flex"} width={"100%"} justifyContent={"flex-end"}>
             <Button onClick={onClose} variant={"outlined"}>Cancel</Button>
-            <Button sx={{color: '#7281f6', marginLeft: 2}} disabled={!selectedUser || loading} onClick={() => selectedUser && onShare(selectedUser?.id)}  variant={"contained"}>Share</Button>
+            <Button sx={{backgroundColor: '#7281f6', marginLeft: 2}} disabled={!selectedUser || loading} onClick={() => selectedUser && onShare(selectedUser?.id)}  variant={"contained"}>Share</Button>
           </Box>
         </Box>
       </ModalWrapper>
