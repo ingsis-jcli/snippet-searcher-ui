@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {ComplianceEnum, CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from './snippet';
 import {PaginatedUsers, User} from "./users.ts";
 import { TestCase } from "../types/TestCase.ts";
@@ -127,25 +127,33 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
         const headers = await this.getHeaders();
-        const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet.content, {
-            headers: {
-                ...headers,
-                'Content-Type': 'text/plain',
-            },
-            params: {
-                snippetId: id,
-            },
-        });
-        const snippet: Snippet = {
-            id: response.data.id,
-            name: response.data.name,
-            content: response.data.content,
-            language: response.data.language,
-            extension: response.data.extension,
-            compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
-            author: response.data.author,
+        try {
+            const response = await axios.put(`${this.baseUrl}/snippets/snippet`, updateSnippet.content, {
+                headers: {
+                    ...headers,
+                    'Content-Type': 'text/plain',
+                },
+                params: {
+                    snippetId: id,
+                },
+            });
+            const snippet: Snippet = {
+                id: response.data.id,
+                name: response.data.name,
+                content: response.data.content,
+                language: response.data.language,
+                extension: response.data.extension,
+                compliance: this.mapProcessStatusToComplianceEnum(response.data.compliance),
+                author: response.data.author,
+            }
+            return snippet;
         }
-        return snippet;
+        catch (error: unknown) {
+        const axiosError = error as AxiosError<ErrorResponseData>;
+        const errorMessage = axiosError.response?.data?.message || "Failed to edit snippet";
+        alert(errorMessage);
+        throw new Error(errorMessage);
+    }
     }
 
     async getUserFriends(name: string = '', page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
@@ -184,14 +192,21 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
-        const  response = await axios.post(`${this.baseUrl}/permissions/permissions/share`, null, {
-            headers: this.getHeaders(),
-            params: {
-                snippetId: snippetId,
-                friendId: userId,
-            },
-        });
-        return response.data;
+        try {
+            const  response = await axios.post(`${this.baseUrl}/permissions/permissions/share`, null, {
+                headers: this.getHeaders(),
+                params: {
+                    snippetId: snippetId,
+                    friendId: userId,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to share snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
     }
 
     async getFormatRules(): Promise<Rule[]> {
@@ -217,18 +232,34 @@ export class ImplementedSnippetOperations implements SnippetOperations {
 
     async getTestCases(snippetId: string): Promise<TestCase[]> {
         const headers = await this.getHeaders();
-        const response = await axios.get(`${this.baseUrl}/snippets/testcase/${snippetId}`, {
-            headers
-        });
-        return response.data;
+        try {
+            const response = await axios.get(`${this.baseUrl}/snippets/testcase/${snippetId}`, {
+                headers
+            });
+            return response.data;
+        }
+        catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to get test cases for snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
     }
 
     async formatSnippet(snippetId: string): Promise<string> {
         const headers = await this.getHeaders();
-        const response = await axios.get(`${this.baseUrl}/snippets/snippet/format/${snippetId}`, {
-            headers
-        });
-        return response.data;
+        try {
+            const response = await axios.get(`${this.baseUrl}/snippets/snippet/format/${snippetId}`, {
+                headers
+            });
+            return response.data;
+        }
+        catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to format snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
@@ -241,34 +272,63 @@ export class ImplementedSnippetOperations implements SnippetOperations {
         };
 
         const headers = await this.getHeaders();
-        const response = await axios.post(`${this.baseUrl}/snippets/testcase`, defaultTestType, {
-            headers,
-        });
-        return response.data;
+        try {
+            const response = await axios.post(`${this.baseUrl}/snippets/testcase`, defaultTestType, {
+                headers,
+            });
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to post test case for snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
+
     }
 
 
     async removeTestCase(id: string): Promise<string> {
-        const response = await axios.delete(`${this.baseUrl}/snippets/testcase/${id}`, {
-            headers: this.getHeaders(),
-        });
-        return response.data;
+        try {
+            const response = await axios.delete(`${this.baseUrl}/snippets/testcase/${id}`, {
+                headers: this.getHeaders(),
+            });
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to remove test case for snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
     }
 
     async deleteSnippet(id: string): Promise<string> {
-        const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
-            headers: this.getHeaders(),
-        });
-        return response.data;
+        try {
+            const response = await axios.delete(`${this.baseUrl}/snippets/snippet/${id}`, {
+                headers: this.getHeaders(),
+            });
+            return response.data;
+        }  catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to delete snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
     }
 
     async testSnippet(id: string): Promise<TestCaseResult> {
         const headers = await this.getHeaders();
+        try {
+            const response = await axios.get(`${this.baseUrl}/snippets/testcase/run/${id}`, {
+                headers,
+            });
+            return this.mapTestResultToCorresponding(response.data);
+        } catch (error) {
+            const axiosError = error as AxiosError<ErrorResponseData>;
+            const errorMessage = axiosError.response?.data?.message || "Failed to run test case on snippet";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+        }
 
-        const response = await axios.get(`${this.baseUrl}/snippets/testcase/run/${id}`, {
-            headers,
-        });
-        return this.mapTestResultToCorresponding(response.data);
     }
 
     async getFileTypes(): Promise<FileType[]> {
@@ -337,4 +397,8 @@ export class ImplementedSnippetOperations implements SnippetOperations {
                 return 'fail';
         }
     }
+}
+
+interface ErrorResponseData {
+    message?: string;
 }
