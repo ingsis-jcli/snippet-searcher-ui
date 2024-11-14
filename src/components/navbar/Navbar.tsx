@@ -23,7 +23,7 @@ export const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     return (
-        <AppBar position="static" elevation={0}>
+        <AppBar position="static" elevation={0}  sx={{ backgroundColor: '#d2afff' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{display: "flex", gap: "24px"}}>
                     <Typography
@@ -50,9 +50,9 @@ export const Navbar = () => {
                                     display: 'flex',
                                     justifyContent: "center",
                                     gap: "4px",
-                                    backgroundColor: location.pathname === page.path ? 'primary.light' : 'transparent',
+                                    backgroundColor: location.pathname === page.path ? '#7281f6' : 'transparent',
                                     "&:hover": {
-                                        backgroundColor: 'primary.dark'
+                                        backgroundColor: '#ed7ee5'
                                     }
                                 }}
                             >

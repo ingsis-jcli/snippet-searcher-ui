@@ -63,11 +63,21 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                                 sx={{display: 'flex', alignItems: 'center'}}>
                         Add Snippet
                     </Typography>
-                    <Button disabled={!snippetName || !code || !language || loadingSnippet} variant="contained"
-                            disableRipple
-                            sx={{boxShadow: 0}} onClick={handleCreateSnippet}>
-                        <Box pr={1} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                            {loadingSnippet ? <CircularProgress size={24}/> : <Save/>}
+                    <Button
+                        disabled={!snippetName || !code || !language || loadingSnippet}
+                        variant="contained"
+                        disableRipple
+                        sx={{
+                            boxShadow: 0,
+                            backgroundColor: (!snippetName || !code || !language || loadingSnippet) ? 'gray' : '#7281f6',
+                            "&:hover": {
+                                backgroundColor: (!snippetName || !code || !language || loadingSnippet) ? 'gray' : '#ed7ee5',
+                            },
+                        }}
+                        onClick={handleCreateSnippet}
+                    >
+                        <Box pr={1} display="flex" alignItems="center" justifyContent="center">
+                            {loadingSnippet ? <CircularProgress size={24} /> : <Save />}
                         </Box>
                         Save Snippet
                     </Button>
@@ -80,7 +90,7 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
             }}>
                 <InputLabel htmlFor="name">Name</InputLabel>
                 <Input onChange={e => setSnippetName(e.target.value)} value={snippetName} id="name"
-                       sx={{width: '50%'}}/>
+                       sx={{width: '50%'}} data-testid="SnippetNameInput"/>
             </Box>
             <Box sx={{
                 display: 'flex',

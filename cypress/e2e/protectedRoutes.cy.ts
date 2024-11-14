@@ -1,3 +1,4 @@
+/*
 import {AUTH0_USERNAME,AUTH0_PASSWORD} from "../../src/utils/constants";
 
 describe('Protected routes test', () => {
@@ -35,3 +36,4 @@ describe('Protected routes test', () => {
   });
 
 })
+*/

@@ -69,6 +69,9 @@ const FormattingRulesList = () => {
                 checked={rule.isActive}
                 disableRipple
                 onChange={toggleRule(rule)}
+                sx = {{'&.Mui-checked': {
+                        color: '#7281f6'
+                    }}}
               />
               <ListItemText primary={rule.name} />
               {typeof rule.value === 'number' ?
@@ -88,7 +91,7 @@ const FormattingRulesList = () => {
           )
         })}
       </List>
-      <Button disabled={isLoading} variant={"contained"} onClick={() => mutateAsync(rules ?? [])}>Save</Button>
+      <Button sx={{backgroundColor: '#7281f6', "&:hover": {backgroundColor: '#ed7ee5'}}} disabled={isLoading} variant={"contained"} onClick={() => mutateAsync(rules ?? [])}>Save</Button>
     </Card>
 
   );

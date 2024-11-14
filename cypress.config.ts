@@ -11,5 +11,9 @@ export default defineConfig({
     },
     experimentalStudio: true,
     baseUrl: FRONTEND_URL,
+      env: {
+        FRONTEND_URL: "https://snippetsearcherjcli.duckdns.org",
+        BACKEND_URL: "https://snippetsearcherjcli.duckdns.org/api"
+      }
   },
 });
